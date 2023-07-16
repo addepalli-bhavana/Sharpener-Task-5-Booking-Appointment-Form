@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./CSS/style.css" />
+    <title>Form</title>
+  </head>
+  <body>
+    <form>
+      <label for="name">Name:</label><br />
+      <input type="text" name="name" id="name" /><br />
+
+      <label for="email">Email:</label><br />
+      <input type="email" name="email" id="email" /><br />
+
+      <label for="phn-no">Phone Number:</label><br />
+      <input type="tel" name="phn-no" id="phn-no" /><br />
+
+      <button type="button" class="btn">SUBMIT</button>
+    </form>
+    <ul class="persons"></ul>
+
+    <script>
+      let userName = document.getElementById("name");
+      let email = document.getElementById("email");
+      let phoneNumber = document.getElementById("phn-no");
+
+      document
+        .getElementsByClassName("btn")[0]
+        .addEventListener("click", (e) => {
+          if (
+            userName.value == "" ||
+            email.value == "" ||
+            phoneNumber.value == ""
+          ) {
+            alert("Please fill all the details");
+          } else {
+            let obj = {
+              userName: userName.value,
+              emailId: email.value,
+              phoneNumber: phoneNumber.value,
+            };
+
+            localStorage.setItem(email.value, JSON.stringify(obj));
+
+            let persons = document.getElementsByClassName("persons")[0];
+            let liTag = document.createElement("li");
+            liTag.className = "person";
+
+            let divOne = document.createElement("div");
+            divOne.className = "person-name";
+            divOne.textContent = "Name : " + userName.value;
+
+            let divTwo = document.createElement("div");
+            divTwo.className = "person-email";
+            divTwo.textContent = "Email Id : " + email.value;
+
+            let divThree = document.createElement("div");
+            divThree.className = "person-phn-no";
+            divThree.textContent = "Phone Number : " + phoneNumber.value;
+
+            let btnOne = document.createElement("button");
+            btnOne.setAttribute("type", "button");
+            btnOne.setAttribute("class", "delete-btn");
+            btnOne.innerText = "DELETE";
+            btnOne.addEventListener("click", deletePerson);
+            function deletePerson() {
+              btnOne.parentElement.remove();
+              localStorage.removeItem(obj.emailId);
+            }
+
+            let btnTwo = document.createElement("button");
+            btnTwo.setAttribute("type", "button");
+            btnTwo.setAttribute("class", "edit-btn");
+            btnTwo.innerText = "EDIT";
+            btnTwo.addEventListener("click", () => {
+              btnTwo.parentElement.remove();
+              localStorage.removeItem(obj.emailId);
+              userName.value = obj.userName;
+              email.value = obj.emailId;
+              phoneNumber.value = obj.phoneNumber;
+            });
+
+            liTag.append(divOne);
+            liTag.append(divTwo);
+            liTag.append(divThree);
+            liTag.append(btnOne);
+            liTag.append(btnTwo);
+            persons.append(liTag);
+            userName.value = "";
+            email.value = "";
+            phoneNumber.value = "";
+          }
+        });
+    </script>
+  </body>
+</html>
